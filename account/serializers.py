@@ -46,12 +46,11 @@ class AdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = (
-            "email",
             "first_name",
             "last_name",
             "user_type",
             "phone_number",
-            "hospital",
+            "station",
             "password",
             "password2",
         )

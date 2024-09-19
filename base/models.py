@@ -52,12 +52,17 @@ FUEL_TYPE = [
     ("petrol", "Petrol"),
 ]
 
+BOOLEAN_TYPE = [
+    ("yes", "Yes"),
+    ("no", "No"),
+]
 
-class WorkingDay(models.Model):
-    day = models.CharField(max_length=3, choices=WORKING_DAYS_CHOICES, unique=True)
 
-    def __str__(self):
-        return dict(WORKING_DAYS_CHOICES)[self.day]
+# class WorkingDay(models.Model):
+#     day = models.CharField(max_length=3, choices=WORKING_DAYS_CHOICES, unique=True)
+
+#     def __str__(self):
+#         return dict(WORKING_DAYS_CHOICES)[self.day]
 
 
 class BusStation(models.Model):
@@ -69,7 +74,7 @@ class BusStation(models.Model):
         choices=LOCATION_REGION, max_length=20, blank=True, null=True
     )
     image = models.ImageField(upload_to="images", null=True, blank=True)
-    working_days = models.ManyToManyField(WorkingDay, related_name="station")
+    working_days = models.CharField(max_length=50)
     start_time = models.TimeField()
     closing_time = models.TimeField()
     date_created = models.DateTimeField(auto_now_add=True)
@@ -93,7 +98,7 @@ class Bus(models.Model):
     car_name = models.CharField(max_length=100, null=True, blank=True)
     car_number = models.CharField(max_length=20)
     seat_number = models.IntegerField()
-    air_conditioner = models.BooleanField(default=False)
+    air_conditioner = models.CharField(max_length=3, choices=BOOLEAN_TYPE, default="no")
     fuel_type = models.CharField(max_length=6, choices=FUEL_TYPE, default="diesel")
     gear_type = models.CharField(max_length=9, choices=GEAR_TYPE, default="manual")
     bus_image = models.ImageField(upload_to="images", null=True, blank=True)

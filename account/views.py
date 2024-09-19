@@ -62,7 +62,6 @@ class CustomAuthModel(ObtainAuthToken):
                 "user_type": user.user_type,
                 "token": token.key,
                 "user_id": user.pk,
-                "response": "Login successfully",
             }
         )
 

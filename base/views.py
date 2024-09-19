@@ -26,6 +26,17 @@ class RetrieveUpdateDeleteBusStation(generics.RetrieveUpdateDestroyAPIView):
     queryset = BusStation.objects.all()
 
 
+class RetrieveAdminStation(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.TokenAuthentication]
+    serializer_class = BusStationSerializer
+
+    def get_queryset(self):
+        return BusStation.objects.filter(admin=self.request.user)
+
+
+
+
 class CreateBus(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [authentication.TokenAuthentication]

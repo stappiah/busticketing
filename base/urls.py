@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     path("create-bus-station", views.CreateListBusStation.as_view()),
     path("bus-station-details/<int:pk>", views.RetrieveUpdateDeleteBusStation.as_view()),
+    path("admin-station", views.RetrieveAdminStation.as_view()),
 
     path("create-bus", views.CreateBus.as_view()),
     path("delete-bus/<int:pk>", views.DeleteBus.as_view()),
