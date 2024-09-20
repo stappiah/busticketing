@@ -9,6 +9,7 @@ from .serializers import (
     Ticket,
 )
 from .models import Bus, BusRoute, BusStation, Ticket, Driver, Reservation, Schedule
+from django.db.models import Q
 
 
 # Create your views here.
@@ -32,9 +33,7 @@ class RetrieveAdminStation(generics.ListAPIView):
     serializer_class = BusStationSerializer
 
     def get_queryset(self):
-        return BusStation.objects.filter(admin=self.request.user)
-
-
+        return BusStation.objects.filter(Q(admin=self.request.user) | Q(id=self.request.user.station.id))
 
 
 class CreateBus(generics.CreateAPIView):
