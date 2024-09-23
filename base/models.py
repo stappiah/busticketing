@@ -2,11 +2,6 @@ from django.db import models
 from django.conf import settings
 
 # Create your models here.
-"""
-TODO
- bus route, passenger, booking, ticket,
-"""
-
 
 LOCATION_REGION = [
     ("Upper West Region", "Upper West Region"),
@@ -58,23 +53,17 @@ BOOLEAN_TYPE = [
 ]
 
 
-# class WorkingDay(models.Model):
-#     day = models.CharField(max_length=3, choices=WORKING_DAYS_CHOICES, unique=True)
-
-#     def __str__(self):
-#         return dict(WORKING_DAYS_CHOICES)[self.day]
-
-
 class BusStation(models.Model):
     admin = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     company_name = models.CharField(max_length=100)
     station_name = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=15)
     region = models.CharField(
         choices=LOCATION_REGION, max_length=20, blank=True, null=True
     )
     image = models.ImageField(upload_to="images", null=True, blank=True)
-    working_days = models.CharField(max_length=50)
+    working_days = models.JSONField()
     start_time = models.TimeField()
     closing_time = models.TimeField()
     date_created = models.DateTimeField(auto_now_add=True)
@@ -122,7 +111,7 @@ class BusRoute(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Route from {self.origin} to {self.destination}"
+        return f"Route from {self.station.address} to {self.route_name}"
 
 
 class Schedule(models.Model):
@@ -132,6 +121,7 @@ class Schedule(models.Model):
     bus = models.ForeignKey(Bus, on_delete=models.PROTECT)
     departure_time = models.TimeField()
     arrival_time = models.TimeField()
+    departure_date = models.DateField()
     driver = models.ForeignKey(Driver, on_delete=models.PROTECT)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=9, choices=BOOKING_STATUS)
@@ -141,16 +131,52 @@ class Schedule(models.Model):
     def __str__(self):
         return f"Bus from {self.station.station_name} to {self.destination.route_name}"
 
+    @property
+    def get_destination(self):
+        return self.destination.route_name
+
+    @property
+    def seat_number(self):
+        return self.bus.seat_number
+
+    @property
+    def car_number(self):
+        return self.bus.car_number
+
+    @property
+    def get_station(self):
+        return self.station.station_name
+
+    @property
+    def gear_type(self):
+        return self.bus.gear_type
+
+    @property
+    def fuel_type(self):
+        return self.bus.fuel_type
+
+    @property
+    def station_address(self):
+        return self.station.address
+
 
 class Reservation(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=20)
+    email = models.EmailField()
     schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE)
     seat_number = models.IntegerField()
-    status = models.CharField(max_length=12, choices=BOOKING_STATUS)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
+
+    @property
+    def get_amount(self):
+        return self.schedule.amount
+
+    @property
+    def get_destination(self):
+        return self.schedule.destination.route_name
 
 
 class Ticket(models.Model):
@@ -161,3 +187,12 @@ class Ticket(models.Model):
 
     def __str__(self):
         return f"ticket number {self.pk}"
+
+
+class Payment(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone_number = models.CharField(max_length=15)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)

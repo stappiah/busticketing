@@ -28,7 +28,12 @@ SECRET_KEY = "2da69d7f65912532e2e5c61c4ef2a016"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["192.168.8.186","192.168.43.67","192.168.0.171","busticketing.onrender.com"]
+ALLOWED_HOSTS = [
+    "192.168.8.186",
+    "192.168.43.67",
+    "192.168.0.171",
+    "busticketing.onrender.com",
+]
 
 
 # Application definition
@@ -45,6 +50,8 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework",
     "rest_framework.authtoken",
+    "cloudinary_storage",
+    "cloudinary",
 ]
 
 MIDDLEWARE = [
@@ -56,6 +63,12 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dzl3jgiqc',
+    'API_KEY': '523355661811186',
+    'API_SECRET': 'oS46EJ7yXpt3V6pn1vWnc-9vgPg'
+}
 
 ROOT_URLCONF = "busticketing.urls"
 
@@ -135,7 +148,8 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
