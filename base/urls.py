@@ -41,6 +41,6 @@ urlpatterns = [
 
     path("rental-request", views.CreateRentalRequest.as_view()),
     path("station-rental-request/<int:pk>", views.StationRentalRequest.as_view()),
-    path("user-rental-request/<int:pk>", views.UserRentalRequest.as_view()),
+    path("user-rental-request", views.UserRentalRequest.as_view()),
 
 ]
