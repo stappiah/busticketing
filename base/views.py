@@ -308,7 +308,7 @@ class StationRentalRequest(generics.ListAPIView):
 
     def get_queryset(self):
         station_id = self.kwargs.get("pk")
-        queryset = RentalRequest.objects.filter(id=station_id)
+        queryset = RentalRequest.objects.filter(rental__station=station_id)
         return queryset
 
 
