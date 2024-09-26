@@ -201,6 +201,17 @@ class RetrieveUpdateDeleteSchedule(generics.RetrieveUpdateDestroyAPIView):
     queryset = Schedule.objects.all()
 
 
+class RetrieveScheduleReservation(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.TokenAuthentication]
+    serializer_class = ReservationSerializer
+
+    def get_queryset(self):
+        schedule_id = self.kwargs.get('pk')
+        queryset = Reservation.objects.filter(schedule=schedule_id)
+        return queryset
+
+
 class RetrieveStationSchedule(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [authentication.TokenAuthentication]

@@ -31,6 +31,7 @@ urlpatterns = [
     path("schedule", views.CreateSchedule.as_view()),
     path("schedule/<int:pk>", views.RetrieveUpdateDeleteSchedule.as_view()),
     path("station-schedule/<int:pk>", views.RetrieveStationSchedule.as_view()),
+    path("schedule-reservation/<int:pk>", views.RetrieveScheduleReservation.as_view()),
 
     path("bus-rental", views.CreateBusRental.as_view()),
     path("bus-rental/<int:pk>", views.RetrieveBusRental.as_view()),
