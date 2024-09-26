@@ -40,5 +40,7 @@ urlpatterns = [
     path("bus-rental-prices/<int:pk>", views.BusRentalPrices.as_view()),
 
     path("rental-request", views.CreateRentalRequest.as_view()),
+    path("station-rental-request/<int:pk>", views.StationRentalRequest.as_view()),
+    path("user-rental-request/<int:pk>", views.UserRentalRequest.as_view()),
 
 ]

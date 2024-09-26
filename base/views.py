@@ -299,3 +299,25 @@ class CreateRentalRequest(generics.CreateAPIView):
     authentication_classes = [authentication.TokenAuthentication]
     serializer_class = RentalRequestSerializer
     queryset = RentalRequest.objects.all()
+
+
+class StationRentalRequest(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.TokenAuthentication]
+    serializer_class = RentalRequestSerializer
+
+    def get_queryset(self):
+        station_id = self.kwargs.get("pk")
+        queryset = RentalRequest.objects.filter(id=station_id)
+        return queryset
+
+
+class UserRentalRequest(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.TokenAuthentication]
+    serializer_class = RentalRequestSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = RentalRequest.objects.filter(user=user)
+        return queryset
