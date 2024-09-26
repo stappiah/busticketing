@@ -97,6 +97,8 @@ class Bus(models.Model):
     def __str__(self):
         return f"{self.station.station_name} bus number {self.car_name}"
 
+    def station_address(self):
+        return self.station.address
 
 class BusRoute(models.Model):
     admin = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -116,9 +118,9 @@ class BusRoute(models.Model):
 
 class Schedule(models.Model):
     admin = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-    station = models.ForeignKey(BusStation, on_delete=models.PROTECT)
-    destination = models.ForeignKey(BusRoute, on_delete=models.PROTECT)
-    bus = models.ForeignKey(Bus, on_delete=models.PROTECT)
+    station = models.ForeignKey(BusStation, on_delete=models.CASCADE)
+    destination = models.ForeignKey(BusRoute, on_delete=models.CASCADE)
+    bus = models.ForeignKey(Bus, on_delete=models.CASCADE)
     departure_time = models.TimeField()
     arrival_time = models.TimeField()
     departure_date = models.DateField()
@@ -187,6 +189,48 @@ class Ticket(models.Model):
 
     def __str__(self):
         return f"ticket number {self.pk}"
+
+
+class BusRental(models.Model):
+    admin = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) 
+    station = models.ForeignKey(BusStation, on_delete=models.CASCADE)  
+    bus = models.ForeignKey(Bus, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=20)
+    whatsapp = models.CharField(max_length=20, null=True, blank=True)
+
+    @property
+    def get_bus_image(self):
+        return self.bus.bus_image.url
+
+    @property
+    def get_station_name(self):
+        return self.station.station_name
+
+    @property
+    def get_bus_name(self):
+        return self.bus.car_name
+
+    @property
+    def get_car_number(self):
+        return self.bus.car_number
+
+
+class RentalPrice(models.Model):
+    admin = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    price = models.DecimalField(decimal_places=2, max_digits=10)
+    destination = models.CharField(choices=LOCATION_REGION, max_length=20)
+    rental = models.ForeignKey(BusRental, on_delete=models.CASCADE)
+
+
+class RentalRequest(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=100)
+    pickup = models.CharField(max_length=100)
+    region = models.CharField(choices=LOCATION_REGION, max_length=20)
+    destination = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=15)
+    rental = models.ForeignKey(BusRental, on_delete=models.PROTECT)
+    cost = models.DecimalField(max_digits=10, decimal_places=2)
 
 
 class Payment(models.Model):

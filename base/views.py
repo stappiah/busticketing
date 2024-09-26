@@ -8,6 +8,9 @@ from .serializers import (
     ReservationSerializer,
     ScheduleSerializer,
     PaymentSerializer,
+    BusRentalSerializer,
+    RentalPriceSerializer,
+    RentalRequestSerializer,
 )
 from .models import (
     Bus,
@@ -18,8 +21,13 @@ from .models import (
     Reservation,
     Schedule,
     Payment,
+    BusRental,
+    RentalPrice,
+    RentalRequest,
 )
 from django.db.models import Q
+from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 
 
 # Create your views here.
@@ -57,6 +65,26 @@ class CreateBus(generics.CreateAPIView):
     authentication_classes = [authentication.TokenAuthentication]
     serializer_class = BusSerializer
     queryset = Bus.objects.all()
+
+
+class RetrieveBusDetail(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.TokenAuthentication]
+    serializer_class = BusSerializer
+
+    def get_object(self):
+        bus_id = self.kwargs.get("pk")
+        return get_object_or_404(Bus, id=bus_id)
+
+    def get(self, request, *args, **kwargs):
+        # Retrieve the bus object
+        bus = self.get_object()
+
+        # Serialize the bus object
+        serializer = self.get_serializer(bus)
+
+        # Return the serialized data in the response
+        return Response(serializer.data)
 
 
 class DeleteBus(generics.DestroyAPIView):
@@ -197,8 +225,77 @@ class UserCurrentReservation(generics.ListAPIView):
     serializer_class = ReservationSerializer
 
     def get_queryset(self):
-        status = 'on_going'
+        status = "on_going"
         queryset = Reservation.objects.filter(
             user=self.request.user, schedule__status=status
         )
         return queryset
+
+
+class CreateBusRental(generics.CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.TokenAuthentication]
+    serializer_class = BusRentalSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        rental = serializer.save()
+
+        return Response(
+            {
+                "id": rental.pk,
+                "station": rental.station.id,
+                "phone_number": rental.phone_number,
+            }
+        )
+
+
+class ListBusRentals(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.TokenAuthentication]
+    serializer_class = BusRentalSerializer
+    queryset = BusRental.objects.all()
+
+
+class GetBusRental(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.TokenAuthentication]
+    serializer_class = BusRentalSerializer
+
+    def get_queryset(self):
+        station = self.kwargs.get("pk")
+        queryset = BusRental.objects.filter(station=station)
+        return queryset
+
+
+class DeleteBusRental(generics.DestroyAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.TokenAuthentication]
+    serializer_class = BusRentalSerializer
+    queryset = BusRental.objects.all()
+
+
+class CreateRentalPrice(generics.CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.TokenAuthentication]
+    serializer_class = RentalPriceSerializer
+    queryset = RentalPrice.objects.all()
+
+
+class BusRentalPrices(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.TokenAuthentication]
+    serializer_class = RentalPriceSerializer
+
+    def get_queryset(self):
+        rental_id = self.kwargs.get("pk")
+        queryset = RentalPrice.objects.filter(rental=rental_id)
+        return queryset
+
+
+class CreateRentalRequest(generics.CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.TokenAuthentication]
+    serializer_class = RentalRequestSerializer
+    queryset = RentalRequest.objects.all()
