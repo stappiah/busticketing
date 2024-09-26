@@ -232,6 +232,19 @@ class UserCurrentReservation(generics.ListAPIView):
         return queryset
 
 
+class UserCompletedReservation(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.TokenAuthentication]
+    serializer_class = ReservationSerializer
+
+    def get_queryset(self):
+        status = "completed"
+        queryset = Reservation.objects.filter(
+            user=self.request.user, schedule__status=status
+        )
+        return queryset
+
+
 class CreateBusRental(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [authentication.TokenAuthentication]

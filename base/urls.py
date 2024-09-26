@@ -26,6 +26,7 @@ urlpatterns = [
     path("station-reservation/<int:pk>", views.ListReservation.as_view()),
     path("create-payment", views.CreatePayment.as_view()),
     path("user-reservation", views.UserCurrentReservation.as_view()),
+    path("completed-reservation", views.UserCompletedReservation.as_view()),
 
     path("schedule", views.CreateSchedule.as_view()),
     path("schedule/<int:pk>", views.RetrieveUpdateDeleteSchedule.as_view()),
