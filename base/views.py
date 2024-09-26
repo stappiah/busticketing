@@ -258,6 +258,13 @@ class ListBusRentals(generics.ListAPIView):
     queryset = BusRental.objects.all()
 
 
+class RetrieveBusRental(generics.RetrieveAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.TokenAuthentication]
+    serializer_class = BusRentalSerializer
+    queryset = BusRental.objects.all()
+
+
 class GetBusRental(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [authentication.TokenAuthentication]
