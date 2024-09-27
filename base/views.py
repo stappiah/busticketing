@@ -219,7 +219,7 @@ class RetrieveStationSchedule(generics.ListAPIView):
 
     def get_queryset(self):
         station = self.kwargs.get("pk")
-        queryset = Schedule.objects.filter(station=station)
+        queryset = Schedule.objects.filter(station=station).order_by('-date_created')
         return queryset
 
 
@@ -251,7 +251,7 @@ class UserCurrentReservation(generics.ListAPIView):
         status = "on_going"
         queryset = Reservation.objects.filter(
             user=self.request.user, schedule__status=status
-        )
+        ).order_by('-date_created')
         return queryset
 
 
@@ -264,7 +264,7 @@ class UserCompletedReservation(generics.ListAPIView):
         status = "completed"
         queryset = Reservation.objects.filter(
             user=self.request.user, schedule__status=status
-        )
+        ).order_by('-date_created')
         return queryset
 
 
@@ -291,7 +291,7 @@ class ListBusRentals(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [authentication.TokenAuthentication]
     serializer_class = BusRentalSerializer
-    queryset = BusRental.objects.all()
+    queryset = BusRental.objects.all().order_by('-date_created')
 
 
 class RetrieveBusRental(generics.RetrieveAPIView):
@@ -308,7 +308,7 @@ class GetBusRental(generics.ListAPIView):
 
     def get_queryset(self):
         station = self.kwargs.get("pk")
-        queryset = BusRental.objects.filter(station=station)
+        queryset = BusRental.objects.filter(station=station).order_by('-date_created')
         return queryset
 
 
@@ -351,7 +351,7 @@ class StationRentalRequest(generics.ListAPIView):
 
     def get_queryset(self):
         station_id = self.kwargs.get("pk")
-        queryset = RentalRequest.objects.filter(rental__station=station_id)
+        queryset = RentalRequest.objects.filter(rental__station=station_id).order_by('-created_at')
         return queryset
 
 
@@ -362,5 +362,5 @@ class UserRentalRequest(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        queryset = RentalRequest.objects.filter(user=user)
+        queryset = RentalRequest.objects.filter(user=user).order_by('-created_at')
         return queryset

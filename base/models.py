@@ -79,6 +79,7 @@ class Driver(models.Model):
     last_name = models.CharField(max_length=30)
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     license_id = models.CharField(max_length=50)
+    date_created = models.DateTimeField(auto_now_add=True)
 
 
 class Bus(models.Model):
@@ -197,6 +198,7 @@ class BusRental(models.Model):
     bus = models.ForeignKey(Bus, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=20)
     whatsapp = models.CharField(max_length=20, null=True, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True)
 
     @property
     def get_bus_image(self):
