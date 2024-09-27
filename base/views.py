@@ -207,7 +207,7 @@ class RetrieveScheduleReservation(generics.ListAPIView):
     serializer_class = ReservationSerializer
 
     def get_queryset(self):
-        schedule_id = self.kwargs.get('pk')
+        schedule_id = self.kwargs.get("pk")
         queryset = Reservation.objects.filter(schedule=schedule_id)
         return queryset
 
@@ -220,6 +220,18 @@ class RetrieveStationSchedule(generics.ListAPIView):
     def get_queryset(self):
         station = self.kwargs.get("pk")
         queryset = Schedule.objects.filter(station=station)
+        return queryset
+
+
+class OngoingStationSchedule(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.TokenAuthentication]
+    serializer_class = ScheduleSerializer
+
+    def get_queryset(self):
+        station = self.kwargs.get("pk")
+        status = "on_going"
+        queryset = Schedule.objects.filter(station=station, status=status)
         return queryset
 
 
