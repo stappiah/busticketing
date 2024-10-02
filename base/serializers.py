@@ -75,6 +75,7 @@ class ReservationSerializer(serializers.ModelSerializer):
     )
     get_amount = serializers.ReadOnlyField()
     get_destination = serializers.ReadOnlyField()
+    get_car_number = serializers.ReadOnlyField()
 
     class Meta:
         model = Reservation

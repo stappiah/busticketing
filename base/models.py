@@ -181,6 +181,10 @@ class Reservation(models.Model):
     def get_destination(self):
         return self.schedule.destination.route_name
 
+    @property
+    def get_car_number(self):
+        return self.schedule.bus.car_number
+
 
 class Ticket(models.Model):
     schedule = models.ForeignKey(Schedule, on_delete=models.PROTECT)
