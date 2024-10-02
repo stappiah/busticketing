@@ -13,10 +13,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import dj_database_url
 import os
-from django.core.management import call_command
-from account.models import Account
-
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -113,12 +109,6 @@ DATABASES = {
         conn_max_age=600,
     )
 }
-
-
-def create_superuser():
-    if not Account.objects.filter(is_superuser=True).exists():
-        print("Creating superuser...")
-        call_command('createsuperuser', interactive=False, username='admin', phone_number='0545158946', password='Success@2024')
 
 
 # Password validation
