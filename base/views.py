@@ -28,6 +28,11 @@ from .models import (
 from django.db.models import Q
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from django.core.management import call_command
+from django.contrib.auth import get_user_model
+
+
+User = get_user_model()
 
 
 # Create your views here.
@@ -364,3 +369,10 @@ class UserRentalRequest(generics.ListAPIView):
         user = self.request.user
         queryset = RentalRequest.objects.filter(user=user).order_by('-created_at')
         return queryset
+
+
+
+def create_superuser():
+    if not User.objects.filter(is_superuser=True).exists():
+        print("Creating superuser...")
+        call_command('createsuperuser', interactive=False, username='admin', phone_number='0545158946', password='Success@2024')
