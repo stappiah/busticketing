@@ -14,10 +14,9 @@ from pathlib import Path
 import dj_database_url
 import os
 from django.core.management import call_command
-from django.contrib.auth import get_user_model
+from account.models import Account
 
 
-User = get_user_model()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -117,7 +116,7 @@ DATABASES = {
 
 
 def create_superuser():
-    if not User.objects.filter(is_superuser=True).exists():
+    if not Account.objects.filter(is_superuser=True).exists():
         print("Creating superuser...")
         call_command('createsuperuser', interactive=False, username='admin', phone_number='0545158946', password='Success@2024')
 
