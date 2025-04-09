@@ -12,7 +12,7 @@ class AccountSerializer(serializers.ModelSerializer):
         fields = ("phone_number", "first_name", "last_name","user_type", "password", "password2")
         extra_kwargs = {
             "password": {"write_only": True},
-            "password2": {"write_only": True},  # Add this line
+            "password2": {"write_only": True}, 
         }
 
     def create(self, validated_data):
