@@ -104,7 +104,7 @@ WSGI_APPLICATION = "busticketing.wsgi.application"
 
 DATABASES = {
     "default": dj_database_url.config(
-        default="postgresql://busticketingdb_sy9h_user:h2EeTc0AfubKecYMr35QNQT56DRnrf5d@dpg-cvrf70je5dus7387lcm0-a/busticketingdb_sy9h",
+        default=os.getenv("DATABASE_URL"),
         conn_max_age=600,
     )
 }
