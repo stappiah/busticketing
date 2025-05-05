@@ -235,7 +235,7 @@ class RentalRequest(models.Model):
     region = models.CharField(choices=LOCATION_REGION, max_length=20)
     destination = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=15)
-    rental = models.ForeignKey(BusRental, on_delete=models.PROTECT)
+    rental = models.ForeignKey(BusRental, on_delete=models.CASCADE)
     cost = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
 
